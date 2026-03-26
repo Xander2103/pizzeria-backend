@@ -1,0 +1,146 @@
+<h1>Afrekenen</h1>
+
+{% if error is not empty %}
+  <p style="color:red;"><strong>{{ error }}</strong></p>
+{% endif %}
+
+{# ===== KEUZE SCHERM ===== #}
+<div id="mode_choice" style="margin: 16px 0;">
+  <h2>Hoe wil je verder?</h2>
+
+  <button type="button" id="btnToLogin" style="padding:10px 14px; margin-right:10px;">
+    Ik heb een account
+  </button>
+
+  <button type="button" id="btnToGuest" style="padding:10px 14px;">
+    Ik heb geen account
+  </button>
+</div>
+
+
+
+{# ===== LOGIN FORM ===== #}
+<div id="mode_login" style="display:none; margin-top:16px;">
+  <h2>Ik heb een account</h2>
+
+  <form method="post" action="?page=login">
+    <div>
+      <label>E-mail</label><br>
+      <input type="email" name="email" value="{{ last_email|e }}" required>
+    </div>
+
+    <div>
+      <label>Wachtwoord</label><br>
+      <input type="password" name="password" required>
+    </div>
+
+    <button type="submit">Aanmelden</button>
+  </form>
+
+  <p style="margin-top:10px;">
+    <a href="#" id="backFromLogin">← Terug</a>
+  </p>
+</div>
+
+
+
+{# ===== GUEST FORM ===== #}
+<div id="mode_guest" style="display:none; margin-top:16px;">
+  <h2>Ik heb geen account</h2>
+
+  <form method="post" action="?page=checkout_guest">
+    <div>
+      <label>Familienaam</label><br>
+      <input type="text" name="last_name" required>
+    </div>
+
+    <div>
+      <label>Voornaam</label><br>
+      <input type="text" name="first_name" required>
+    </div>
+
+    <div>
+      <label>Straat</label><br>
+      <input type="text" name="street" required>
+    </div>
+
+    <div>
+      <label>Huisnummer</label><br>
+      <input type="text" name="house_number" required>
+    </div>
+
+    <div>
+      <label>Postcode</label><br>
+      <input type="text" name="postal_code" required>
+    </div>
+
+    <div>
+      <label>Gemeente</label><br>
+      <input type="text" name="city" required>
+    </div>
+
+    <div>
+      <label>Telefoonnummer</label><br>
+      <input type="text" name="phone_number" required>
+    </div>
+
+    <div style="margin-top:10px;">
+      <label>
+        <input type="checkbox" id="create_account" name="create_account" value="1">
+        Klik hier om een account aan te maken!
+      </label>
+    </div>
+
+    {# ✅ stap 3: email + ww enkel tonen als checkbox aan staat #}
+    <div id="account_fields" style="display:none; margin-top:10px;">
+      <div>
+        <label>E-mail</label><br>
+        <input type="email" name="new_email">
+      </div>
+
+      <div>
+        <label>Wachtwoord</label><br>
+        <input type="password" name="new_password">
+      </div>
+    </div>
+
+    <button type="submit">Verder</button>
+  </form>
+
+  <p style="margin-top:10px;">
+    <a href="#" id="backFromGuest">← Terug</a>
+  </p>
+</div>
+
+<p style="margin-top:18px;">
+  <a href="?page=products">Terug naar pizza’s</a>
+</p>
+
+
+<script>
+  const modeChoice = document.getElementById('mode_choice');
+  const modeLogin  = document.getElementById('mode_login');
+  const modeGuest  = document.getElementById('mode_guest');
+
+  function showMode(which) {
+    modeChoice.style.display = (which === 'choice') ? 'block' : 'none';
+    modeLogin.style.display  = (which === 'login')  ? 'block' : 'none';
+    modeGuest.style.display  = (which === 'guest')  ? 'block' : 'none';
+  }
+
+  // Buttons
+  document.getElementById('btnToLogin').addEventListener('click', () => showMode('login'));
+  document.getElementById('btnToGuest').addEventListener('click', () => showMode('guest'));
+  document.getElementById('backFromLogin').addEventListener('click', (e) => { e.preventDefault(); showMode('choice'); });
+  document.getElementById('backFromGuest').addEventListener('click', (e) => { e.preventDefault(); showMode('choice'); });
+
+  // Account fields toggle (guest)
+  const cb  = document.getElementById('create_account');
+  const box = document.getElementById('account_fields');
+  function syncAccountFields() { box.style.display = cb.checked ? 'block' : 'none'; }
+  cb.addEventListener('change', syncAccountFields);
+  syncAccountFields();
+
+  // Open start mode from controller
+  showMode('{{ mode }}');
+</script>

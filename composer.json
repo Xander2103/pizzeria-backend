@@ -1,0 +1,17 @@
+{
+  "name": "duisb/php-adv-eindproef-xander-van-malder",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Xander VM",
+      "email": "xandervanmalder@gmail.com"
+    }
+  ],
+  "require": {
+    "twig/twig": "^3.23"
+  }
+}

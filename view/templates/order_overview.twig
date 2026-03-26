@@ -1,0 +1,65 @@
+<h2>Overzicht bestelling</h2>
+
+<h3>Klantgegevens</h3>
+
+{% if is_logged_in %}
+  <p>
+    {{ customer.getFirstName() }} {{ customer.getLastName() }}<br>
+    {{ customer.getStreet() }} {{ customer.getHouseNumber() }}<br>
+    {{ customer.getPostalCode() }} {{ customer.getCity() }}
+  </p>
+{% else %}
+  <p>
+    {{ customer.first_name }} {{ customer.last_name }}<br>
+    {{ customer.street }} {{ customer.house_number }}<br>
+    {{ customer.postal_code }}
+  </p>
+{% endif %}
+
+<h3>Winkelmand</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Aantal</th>
+      <th>Prijs</th>
+      <th>Extra’s</th>
+      <th>Totaal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for line in lines %}
+      <tr>
+        <td>{{ line.product.getName() }}</td>
+        <td>{{ line.qty }}</td>
+        <td>€ {{ line.unit_price|number_format(2, ',', '.') }}</td>
+        <td>{{ line.extras is not empty ? line.extras : '-' }}</td>
+        <td>€ {{ line.line_total|number_format(2, ',', '.') }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h3>Totaal</h3>
+<p><strong>€ {{ total|number_format(2, ',', '.') }}</strong></p>
+
+{% if promo_eligible %}
+  <p><em>Promo toegepast (promo_price).</em></p>
+{% endif %}
+
+<form method="post" action="?page=place_order" style="margin-top: 20px;">
+<label>Opmerking voor koerier</label><br>
+<textarea name="courier_info" rows="3" cols="40" placeholder="bv. bel even, deurbel kapot"></textarea><br>
+<br><button type="submit">Bestelling plaatsen</button>
+</form>
+
+{% if is_logged_in %}
+  <form method="post" action="?page=logout" style="display:inline;">
+    <button type="submit">Uitloggen</button>
+  </form>
+{% endif %}
+<hr>
+
+<a href="?page=address_edit">Adres wijzigen</a><br>
+<br><a href="?page=products">Winkelmand wijzigen</a><br>

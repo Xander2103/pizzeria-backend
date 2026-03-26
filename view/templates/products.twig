@@ -1,0 +1,160 @@
+<h1>Pizza's</h1>
+
+<div style="display:flex; gap:40px; align-items:flex-start;">
+
+  {# LINKS: pizza aanbod #}
+  <div style="flex: 2;">
+    <ul class="product-grid">
+      {% for p in products %}
+        <li class="product-card">
+
+          <strong class="product-title">
+            {{ p.getName() }}
+          </strong>
+
+          {% if p.getImage() is not null %}
+            <img
+              src="assets/img/{{ p.getImage() }}"
+              alt="{{ p.getName() }}"
+              style="display:block; width:160px; height:auto; margin:0 0 8px 0;"
+            >
+          {% endif %}
+
+          {% if p.getDescription() is not null %}
+            <div class="product-desc">
+              {{ p.getDescription() }}
+            </div>
+          {% endif %}
+
+          <div class="product-bottom">
+
+            <div class="product-price">
+              € {{ p.getPrice()|number_format(2, '.', '') }}
+
+              {% if p.getPromoPrice() is not null %}
+                <span class="product-promo">
+                  (promo: € {{ p.getPromoPrice()|number_format(2, '.', '') }})
+                </span>
+              {% endif %}
+            </div>
+
+            {# toevoegen met extras #}
+            <form method="post" action="?page=cart_add">
+              <input type="hidden" name="product_id" value="{{ p.getId() }}">
+
+              <label>Extra’s</label><br>
+
+              <input
+                type="text"
+                name="extras"
+                placeholder="bv. extra kaas, zonder ui"
+              >
+
+              <button type="submit">
+                Toevoegen
+              </button>
+            </form>
+
+          </div>
+
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+
+  {# RECHTS: winkelmand #}
+  <aside style="flex: 1; solid #ccc; padding:12px;">
+  {% if is_logged_in %}
+  <form method="post" action="?page=logout" style="margin: 8px 0;">
+    <button type="submit">Uitloggen</button>
+  </form>
+{% else %}
+  <p style="margin: 8px 0;">
+    <a href="?page=checkout#login" style="font-weight:700;">Aanmelden</a>
+  </p>
+{% endif %}
+
+  <aside style="flex: 1; border:1px solid #ccc; padding:12px;">
+    <p>
+    <a href="?page=home">Home</a>
+    </p>
+    <h2>Winkelmand</h2>
+
+    {% if cartLines is empty %}
+      <p>Leeg</p>
+
+    {% else %}
+
+      <ul>
+
+        {% for line in cartLines %}
+          <li>
+
+            {{ line.product.getName() }}
+            × {{ line.qty }}
+
+            {% if line.extras is not empty %}
+              <em> ({{ line.extras }})</em>
+            {% endif %}
+
+
+            {# MIN knop (BELANGRIJK: gebruikt key) #}
+            <form method="post"
+                  action="?page=cart_remove"
+                  style="display:inline;">
+
+              <input type="hidden"
+                     name="key"
+                     value="{{ line.key }}">
+
+              <button type="submit">-</button>
+
+            </form>
+
+
+            {# PLUS knop (stuurt extras opnieuw mee) #}
+            <form method="post"
+                  action="?page=cart_add"
+                  style="display:inline;">
+
+              <input type="hidden"
+                     name="product_id"
+                     value="{{ line.product.getId() }}">
+
+              <input type="hidden"
+                     name="extras"
+                     value="{{ line.extras }}">
+
+              <button type="submit">+</button>
+
+            </form>
+
+          </li>
+
+        {% endfor %}
+
+      </ul>
+
+
+
+      <form method="post" action="?page=cart_clear">
+        <button type="submit">
+          Leegmaken
+        </button>
+      </form>
+
+
+      <p>
+        <a href="?page=checkout">
+          Afrekenen
+        </a>
+      </p>
+
+    {% endif %}
+
+  </aside>
+
+</div>
+
+

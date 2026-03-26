@@ -1,0 +1,66 @@
+<h1>Adres wijzigen</h1>
+
+<form method="post" action="?page=address_update">
+
+{% if is_logged_in %}
+
+  Straat:<br>
+  <input type="text" name="street" value="{{ customer.getStreet() }}"><br>
+
+  Huisnummer:<br>
+  <input type="text" name="house_number" value="{{ customer.getHouseNumber() }}"><br>
+
+<label>Postcode:</label><br>
+<select name="postal_code" required>
+  {% for pc in postal_codes %}
+    <option value="{{ pc|e }}"
+      {% if customer.postal_code is defined and customer.postal_code == pc %}selected{% endif %}
+    >
+      {{ pc }}
+    </option>
+  {% endfor %}
+</select>
+<br>
+
+  Gemeente:<br>
+  <input type="text" name="city" value="{{ customer.getCity() }}"><br>
+
+  Telefoon:<br>
+  <input type="text" name="phone_number" value="{{ customer.getPhoneNumber() }}"><br>
+
+{% else %}
+
+  Straat:<br>
+  <input type="text" name="street" value="{{ customer.street }}"><br>
+
+  Huisnummer:<br>
+  <input type="text" name="house_number" value="{{ customer.house_number }}"><br>
+
+<label>Postcode:</label><br>
+
+<select name="postal_code" required>
+  {% for pc in postal_codes %}
+    <option value="{{ pc|e }}"
+      {% if customer.postal_code is defined and customer.postal_code == pc %}selected{% endif %}
+    >
+      {{ pc }}
+    </option>
+  {% endfor %}
+</select>
+<br>
+
+  Gemeente:<br>
+  <input type="text" name="city" value="{{ customer.city }}"><br>
+
+  Telefoon:<br>
+  <input type="text" name="phone_number" value="{{ customer.phone_number }}"><br>
+
+{% endif %}
+
+<br>
+<button type="submit">Opslaan</button>
+
+</form>
+
+<br>
+<a href="?page=order_overview">Terug</a>

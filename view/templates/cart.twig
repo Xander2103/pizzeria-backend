@@ -1,0 +1,31 @@
+<h1>Winkelmand</h1>
+
+<p><a href="?page=products">Verder bestellen</a></p>
+
+{% if lines is empty %}
+  <p>Je winkelmand is leeg.</p>
+{% else %}
+  <ul>
+    {% for line in lines %}
+      <li>
+        {{ line.product.getName() }} — aantal: {{ line.qty }}
+        <form method="post" action="?page=cart_remove" style="display:inline;">
+          <input type="hidden" name="product_id" value="{{ line.product.getId() }}">
+          <button type="submit">-1</button>
+        </form>
+        <form method="post" action="?page=cart_add" style="display:inline;">
+          <input type="hidden" name="product_id" value="{{ line.product.getId() }}">
+          <button type="submit">+1</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <form method="post" action="?page=cart_clear">
+    <button type="submit">Winkelmand leegmaken</button>
+  </form>
+
+  <p><a href="?page=checkout">Afrekenen</a></p>
+{% endif %}
+
+<p><a href="?page=home">Home</a></p>

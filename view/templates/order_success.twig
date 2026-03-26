@@ -1,0 +1,49 @@
+<h1>Bestelling geplaatst</h1>
+
+<p>Bedankt! Je bestelling werd succesvol geplaatst.</p>
+
+<h2>Bestelgegevens</h2>
+<ul>
+  <li><strong>Bestelnummer:</strong> {{ order.order_id }}</li>
+  <li><strong>Klantnummer:</strong>
+    {% if order.customer_id %}
+      {{ order.customer_id }}
+    {% else %}
+      Gast
+    {% endif %}
+  </li>
+  <li><strong>Datum & tijd:</strong> {{ order.order_datetime }}</li>
+  <li><strong>Totaalprijs:</strong> € {{ order.total_price|number_format(2, ',', '.') }}</li>
+</ul>
+
+<h2>Bestelde pizza’s</h2>
+<table border="1" cellpadding="6">
+  <thead>
+    <tr>
+      <th>Soort</th>
+      <th>Aantal</th>
+      <th>Prijs per stuk</th>
+      <th>Subtotaal</th>
+      <th>Extra’s</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>€ {{ item.price_each|number_format(2, ',', '.') }}</td>
+        <td>€ {{ (item.quantity * item.price_each)|number_format(2, ',', '.') }}</td>
+        <td>—</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<h2>Info voor koerier</h2>
+<p>{{ order.courier_info }}</p>
+
+
+<p style="margin-top: 20px;">
+  <a href="?page=products">Terug naar pizza’s</a>
+</p>
