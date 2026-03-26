@@ -45,7 +45,7 @@ class AuthController
             // onthoud laatste email (30 dagen)
             setcookie('last_email', $email, time() + 60 * 60 * 24 * 30, '/');
 
-            header('Location: ?page=order_overview');
+            header('Location: ?page=products');
             exit;
         }
 
@@ -67,5 +67,12 @@ class AuthController
 
         header('Location: ?page=products');
         exit;
+    }
+    public function showLogin(\Twig\Environment $twig): void
+    {
+        echo $twig->render('login.twig', [
+            'error' => '',
+            'last_email' => (string)($_COOKIE['last_email'] ?? ''),
+        ]);
     }
 }

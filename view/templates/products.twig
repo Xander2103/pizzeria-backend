@@ -65,13 +65,19 @@
 
   {# RECHTS: winkelmand #}
   <aside style="flex: 1; solid #ccc; padding:12px;">
-  {% if is_logged_in %}
-  <form method="post" action="?page=logout" style="margin: 8px 0;">
-    <button type="submit">Uitloggen</button>
-  </form>
+{% if is_logged_in %}
+  <div style="margin: 8px 0 16px 0;">
+    <p style="margin: 0 0 8px 0; font-weight: 700;">
+      Aangemeld als {{ customer_name }}
+    </p>
+
+    <form method="post" action="?page=logout" style="margin: 0;">
+      <button type="submit">Uitloggen</button>
+    </form>
+  </div>
 {% else %}
-  <p style="margin: 8px 0;">
-    <a href="?page=checkout#login" style="font-weight:700;">Aanmelden</a>
+  <p style="margin: 8px 0 16px 0;">
+    <a href="?page=login">Aanmelden</a>
   </p>
 {% endif %}
 

@@ -1,11 +1,12 @@
 <?php
-//ProductController.php
-//nodig voor producten tonen
+// ProductController.php
 declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Service\AuthService;
 use App\Service\CartService;
+use App\Service\CustomerService;
 use App\Service\ProductService;
 use Twig\Environment;
 
@@ -42,9 +43,33 @@ class ProductController
             ];
         }
 
+        $authService = new AuthService();
+        $customerService = new CustomerService();
+
+        $isLoggedIn = $authService->isLoggedIn();
+        $customerName = '';
+
+        if ($isLoggedIn) {
+            $customerId = $authService->getLoggedInCustomerId();
+
+            if ($customerId !== null) {
+                $customer = $customerService->getById($customerId);
+
+                if ($customer !== null) {
+                    $customerName = trim(sprintf(
+                        '%s %s',
+                        $customer->getFirstName(),
+                        $customer->getLastName()
+                    ));
+                }
+            }
+        }
+
         echo $twig->render('products.twig', [
             'products' => $products,
             'cartLines' => $cartLines,
+            'is_logged_in' => $isLoggedIn,
+            'customer_name' => $customerName,
         ]);
     }
 }
