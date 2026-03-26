@@ -112,7 +112,7 @@ The application follows MVC:
 
 Tables:
 - products
-- customers
+- customers--> nieuwacctest@gmail.com password : test123 ) 
 - orders
 - order_items
 - delivery_areas
